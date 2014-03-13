@@ -1,4 +1,4 @@
-set(STM32_CHIP STM32F407VE)
+set(STM32_CHIP STM32F407VG)
 include(gcc_stm32)
 
 project(stm32-blinky)
@@ -26,3 +26,7 @@ TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${CMSIS_LIBRARIES} ${StdPeriphLib_LI
 
 STM32_SET_TARGET_PROPERTIES(${CMAKE_PROJECT_NAME})
 STM32_ADD_HEX_BIN_TARGETS(${CMAKE_PROJECT_NAME})
+
+add_custom_target(dfu
+  COMMAND sudo dfu-util -v -d 0483:df11 -a 0 -s 0x08000000 -D ${CMAKE_PROJECT_NAME}.bin)
+add_dependencies(dfu ${CMAKE_PROJECT_NAME}.bin)
